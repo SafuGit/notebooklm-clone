@@ -16,12 +16,12 @@ const PdfDoc = () => {
   const { pdfFile: pdf } = useContext(PdfContext);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [extractedText, setExtractedText] = useState<string>('');
   const navigate = useNavigate();
   const { setPdfFile, setSessionId } = use(PdfContext);
   const handleExit = () => {
     setPdfFile(null);
+    sessionStorage.removeItem('sessionId');
     navigate('/');
   };
 

@@ -11,6 +11,10 @@ const PdfProvider = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/pdf" replace />;
   }
 
+  if (sessionId) {
+    sessionStorage.setItem('sessionId', sessionId);
+  }
+
   const pdfData = {
     pdfFile,
     setPdfFile,

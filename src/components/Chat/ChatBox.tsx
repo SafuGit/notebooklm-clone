@@ -1,11 +1,11 @@
-import { useContext, useState } from 'react';
+import { use, useState } from 'react';
 import Chat from './Chat';
 import { PdfContext } from '../../providers/PdfContext';
 import axios from 'axios';
 
 const ChatBox = () => {
   const [messages, setMessages] = useState<{role: string, content: string}[]>([]);
-  const { sessionId } = useContext(PdfContext);
+  const sessionId = sessionStorage.getItem('sessionId') || use(PdfContext).sessionId;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
