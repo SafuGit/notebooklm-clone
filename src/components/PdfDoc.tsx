@@ -4,7 +4,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import { PdfContext } from '../providers/PdfContext';
 import { use, useContext, useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, SquareArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import axios from 'axios';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -60,6 +60,8 @@ const PdfDoc = () => {
 
   const goToPrevPage = () => setPageNumber((prev) => Math.max(prev - 1, 1));
   const goToNextPage = () => setPageNumber((prev) => Math.min(prev + 1, numPages));
+
+  if (!pdf) return <Navigate to="/" replace />;
 
   return (
     <div className="w-full h-screen flex flex-col">

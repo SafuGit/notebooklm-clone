@@ -1,22 +1,17 @@
-const Chat = () => {
+const Chat = ({messages}: {messages: {role: string, content: string}[]}) => {
+  console.log(messages);
   return (
     <div>
-      <div className="chat chat-start">
-        <div className="chat-header">
-          Obi-Wan Kenobi
-          <time className="text-xs opacity-50">2 hours ago</time>
+      {messages.map((msg, index) => (
+        <div key={index} className={`chat ${msg.role === 'user' ? 'chat-start' : 'chat-end'}`}>
+          <div className="chat-header">
+            {msg.role === 'user' ? 'You' : 'PDF Reader AI'}
+            <time className="text-xs opacity-50">{new Date().toLocaleTimeString()}</time>
+          </div>
+          <div className="chat-bubble">{msg.content}</div>
+          <div className="chat-footer opacity-50">Seen</div>
         </div>
-        <div className="chat-bubble">You were the Chosen One!</div>
-        <div className="chat-footer opacity-50">Seen</div>
-      </div>
-      <div className="chat chat-start">
-        <div className="chat-header">
-          Obi-Wan Kenobi
-          <time className="text-xs opacity-50">2 hour ago</time>
-        </div>
-        <div className="chat-bubble">I loved you.</div>
-        <div className="chat-footer opacity-50">Delivered</div>
-      </div>
+      ))}
     </div>
   );
 };
