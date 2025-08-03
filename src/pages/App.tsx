@@ -1,4 +1,4 @@
-import UploadPdf from "./components/UploadPdf"
+import UploadPdf from "../components/UploadPdf"
 
 function App() {
   return (
