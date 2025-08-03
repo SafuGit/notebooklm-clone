@@ -1,6 +1,8 @@
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import { PdfContext } from '../providers/PdfContext';
+import { useContext } from 'react';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -8,7 +10,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const PdfDoc = () => {
-  const pdf = sessionStorage.getItem('pdfFile');
+  const { pdfFile: pdf } = useContext(PdfContext);
 
   return (
     <div>

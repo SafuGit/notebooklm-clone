@@ -1,28 +1,19 @@
 import type React from "react";
+import { use } from "react";
 import { useNavigate } from "react-router";
+import { PdfContext } from "../providers/PdfContext";
 
 const UploadPdf = () => {
   const navigate = useNavigate();
+  const { setPdfFile } = use(PdfContext);
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const input = e.currentTarget;
     const file = input && input.files ? input.files[0] : null;
     console.log("File input submitted");
     if (file) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const base64 = reader.result as string;
-        sessionStorage.setItem("pdfFile", base64);
-        console.log("File read successfully and stored in sessionStorage");
-        navigate('/pdf');
-      }
-
-      reader.onerror = () => {
-        console.error("Error reading file");
-      }
-
-      reader.readAsDataURL(file);
+      setPdfFile(file);
+      navigate("/pdf", { replace: true });
     }
   }
 

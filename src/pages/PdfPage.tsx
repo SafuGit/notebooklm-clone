@@ -1,11 +1,14 @@
 import { SquareArrowLeft } from 'lucide-react';
 import PdfDoc from '../components/PdfDoc';
 import { useNavigate } from 'react-router';
+import { use } from 'react';
+import { PdfContext } from '../providers/PdfContext';
 
 const PdfPage = () => {
   const navigate = useNavigate();
+  const { setPdfFile } = use(PdfContext);
   const handleExit = () => {
-    sessionStorage.removeItem('pdfFile');
+    setPdfFile(null);
     navigate('/');
   };
 
