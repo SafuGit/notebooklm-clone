@@ -1,25 +1,12 @@
-import { SquareArrowLeft } from 'lucide-react';
 import PdfDoc from '../components/PdfDoc';
-import { useNavigate } from 'react-router';
-import { use } from 'react';
-import { PdfContext } from '../providers/PdfContext';
+import ChatBox from '../components/Chat/ChatBox';
 
 const PdfPage = () => {
-  const navigate = useNavigate();
-  const { setPdfFile } = use(PdfContext);
-  const handleExit = () => {
-    setPdfFile(null);
-    navigate('/');
-  };
-
   return (
-    <div className='flex justify-between items-start'>
+    <div className='flex justify-between items-start bg-white text-black'>
       <PdfDoc />
-      <div className='flex flex-col items-center mt-4 mr-4 '>
-        <button className='btn btn-secondary btn-circle' onClick={handleExit}>
-          <SquareArrowLeft></SquareArrowLeft>
-        </button>
-        <h1>Go Back</h1>
+      <div className='flex w-full'>
+        <ChatBox />
       </div>
     </div>
   );
