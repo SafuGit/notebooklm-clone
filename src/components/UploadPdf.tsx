@@ -6,9 +6,20 @@ const UploadPdf = () => {
     const input = e.currentTarget;
     const file = input && input.files ? input.files[0] : null;
     console.log("File input submitted");
-    console.log(file);
     if (file) {
-      console.log(file);
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        sessionStorage.setItem("pdfFile", base64);
+        console.log("File read successfully and stored in sessionStorage");
+      }
+
+      reader.onerror = () => {
+        console.error("Error reading file");
+      }
+
+      reader.readAsDataURL(file);
     }
   }
 
