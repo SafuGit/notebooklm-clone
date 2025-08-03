@@ -1,6 +1,8 @@
 import type React from "react";
+import { useNavigate } from "react-router";
 
 const UploadPdf = () => {
+  const navigate = useNavigate();
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const input = e.currentTarget;
@@ -13,6 +15,7 @@ const UploadPdf = () => {
         const base64 = reader.result as string;
         sessionStorage.setItem("pdfFile", base64);
         console.log("File read successfully and stored in sessionStorage");
+        navigate('/pdf');
       }
 
       reader.onerror = () => {
