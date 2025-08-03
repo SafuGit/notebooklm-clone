@@ -2,9 +2,10 @@ import { Document, Page, pdfjs, type TextItem } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { PdfContext } from '../providers/PdfContext';
-import { use, useContext, useState } from 'react';
+import { use, useContext, useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, SquareArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router';
+import axios from 'axios';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -16,19 +17,33 @@ const PdfDoc = () => {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [extractedText, setExtractedText] = useState<{ page: number; text: string }[]>([]);
+  const [extractedText, setExtractedText] = useState<string>('');
   const navigate = useNavigate();
-  const { setPdfFile } = use(PdfContext);
+  const { setPdfFile, setSessionId } = use(PdfContext);
   const handleExit = () => {
     setPdfFile(null);
     navigate('/');
   };
 
+  useEffect(() => {
+    async function createIngest() {
+      if (extractedText) {
+        const response = await axios.post('http://localhost:3000/ingest', { text: extractedText });
+        const data = response.data;
+        if (data.sessionId) {
+          console.log('Ingest successful:', data);
+          setSessionId(data.sessionId);
+        }
+      }
+    }
+    createIngest();
+  }, [extractedText, setSessionId]);
+
   const onDocumentLoadSuccess = async (pdfDoc: pdfjs.PDFDocumentProxy) => {
     setNumPages(pdfDoc.numPages);
     setPageNumber(1);
 
-    const pageTexts: { page: number; text: string }[] = [];
+    let fullText = '';
     for (let i = 1; i <= pdfDoc.numPages; i++) {
       const page = await pdfDoc.getPage(i);
       const textContent = await page.getTextContent();
@@ -38,9 +53,9 @@ const PdfDoc = () => {
         .map(item => item.str)
         .join(' ');
 
-      pageTexts.push({ page: i, text: pageText });
+      fullText += pageText + '\n\n';
     }
-    setExtractedText(pageTexts);
+    setExtractedText(fullText);
   };
 
   const goToPrevPage = () => setPageNumber((prev) => Math.max(prev - 1, 1));
