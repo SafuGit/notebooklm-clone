@@ -16,7 +16,7 @@ const PdfDoc = () => {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [extractedText, setExtractedText] = useState<string>('');
+  const [extractedText, setExtractedText] = useState<{ page: number; text: string }[]>([]);
   const navigate = useNavigate();
   const { setPdfFile } = use(PdfContext);
   const handleExit = () => {
@@ -28,7 +28,7 @@ const PdfDoc = () => {
     setNumPages(pdfDoc.numPages);
     setPageNumber(1);
 
-    let fullText = '';
+    const pageTexts: { page: number; text: string }[] = [];
     for (let i = 1; i <= pdfDoc.numPages; i++) {
       const page = await pdfDoc.getPage(i);
       const textContent = await page.getTextContent();
@@ -38,9 +38,9 @@ const PdfDoc = () => {
         .map(item => item.str)
         .join(' ');
 
-      fullText += pageText + '\n\n';
+      pageTexts.push({ page: i, text: pageText });
     }
-    setExtractedText(fullText);
+    setExtractedText(pageTexts);
   };
 
   const goToPrevPage = () => setPageNumber((prev) => Math.max(prev - 1, 1));
